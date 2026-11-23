@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>GlowAura — Every Memory Has a Glow</title>
-<meta name="description" content="Personalized acrylic LED photo lamps and decorative LED gifts in Bangladesh.">
+<title>Mular Juice — Gadgets • Lifestyle • Innovation</title>
+<meta name="description" content="Discover decorative lights, lifestyle gadgets and creative gifts from Mular Juice in Bangladesh.">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#111111;--bg2:#181715;--gold:#C5A45A;--gold2:#e3c981;--cream:#F3EBDD;--mute:#a79f90;--line:rgba(197,164,90,.28);--c:#ff4d8d;
@@ -81,9 +81,9 @@ nav a:hover{color:var(--gold2);opacity:1}
 @media(max-width:820px){.feat{grid-template-columns:1fr;gap:30px}}
 
 /* products */
-.grid{display:flex;gap:18px;margin-top:44px;overflow-x:auto;overflow-y:hidden;padding:4px 2px 18px;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
-.grid::-webkit-scrollbar{height:6px}.grid::-webkit-scrollbar-thumb{background:var(--gold);border-radius:8px}
-.card{flex:0 0 clamp(230px,29vw,280px);scroll-snap-align:start;border:1px solid var(--line);padding:20px 18px;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(197,164,90,.07),transparent);transition:border-color .3s,transform .3s;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:44px;padding:4px 2px 18px;align-items:stretch}
+
+.card{min-width:0;border:1px solid var(--line);padding:20px 18px;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(197,164,90,.07),transparent);transition:border-color .3s,transform .3s;cursor:pointer}
 .card:hover{border-color:var(--gold);transform:translateY(-4px)}
 .card{position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
 .card::after{content:"";position:absolute;inset:-60%;pointer-events:none;opacity:0;background:linear-gradient(115deg,transparent 42%,rgba(227,201,129,.28) 50%,transparent 58%);transform:translateX(-65%) rotate(12deg)}
@@ -101,7 +101,7 @@ nav a:hover{color:var(--gold2);opacity:1}
 .card .regular{font:400 .9rem var(--sans);color:var(--mute);text-decoration:line-through;margin-right:9px}
 .card .offer-tag{font:500 .7rem var(--sans);color:#17130a;background:var(--gold2);padding:3px 7px;letter-spacing:.05em}
 .card .btn{min-height:46px;padding:0 16px}
-@media(max-width:520px){.card{flex-basis:76vw}} 
+@media(max-width:520px){.grid{gap:10px}.card{padding:12px 10px}.card h3{font-size:1.08rem}.card p{font-size:.82rem}.card .pr{font-size:1.25rem}.card .btn{padding:0 8px;font-size:.72rem;letter-spacing:.06em;min-height:42px}} 
 
 /* Product details popup */
 .product-modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;padding:18px}
@@ -157,7 +157,7 @@ footer small{display:block;margin-top:18px;color:var(--mute)}
 .rv.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
 
-/* GlowAura ambient premium motion */
+/* Mular Juice ambient premium motion */
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.13;background:radial-gradient(circle at 12% 22%,rgba(227,201,129,.22),transparent 28%),radial-gradient(circle at 88% 72%,rgba(197,164,90,.18),transparent 30%);animation:ambientDrift 13s ease-in-out infinite alternate}
 @keyframes ambientDrift{from{transform:translate3d(-2%,0,0) scale(1)}to{transform:translate3d(2%,-1%,0) scale(1.08)}}
 #goldParticles{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;opacity:.58}
@@ -172,7 +172,7 @@ section,.hero,footer{isolation:isolate}
 @media(prefers-reduced-motion:reduce){body::after,#goldParticles{display:none}.rv.in{animation:none}}
 
 
-/* GlowAura order experience */
+/* Mular Juice order experience */
 .order-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .order-actions .btn{flex:1;min-width:170px}
 .btn.whatsapp{background:#168c55;border-color:#168c55;color:#fff}
@@ -207,13 +207,13 @@ section,.hero,footer{isolation:isolate}
 
 <header>
  <div class="wrap bar">
-  <a class="logo" href="#home">Glow<b>Aura</b></a>
+  <a class="logo" href="#home" aria-label="Mular Juice Home">Mular <b>Juice</b></a>
   <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">☰</button>
   <nav id="nav"><ul>
    <li><a href="#home">Home</a></li>
    <li><a href="#products">Our Products</a></li>
-   <li><a href="#customize">Customize Your Gift</a></li>
-   <li><a href="#why">Why GlowAura</a></li>
+   <li><a href="#customize">Featured Collection</a></li>
+   <li><a href="#why">Why Mular Juice</a></li>
    <li><a href="#about">About Us</a></li>
    <li><a href="#contact">Contact Us</a></li>
   </ul></nav>
@@ -225,11 +225,11 @@ section,.hero,footer{isolation:isolate}
 <section class="hero" id="home">
  <div class="wrap">
   <div class="intro">
-   <h1>Make Your Moments <span>Glow.</span></h1>
-   <p class="sub">Turn Your Favourite Memories Into Beautiful Glowing Keepsakes.</p>
+   <h1>Discover Your Next <span>Favourite Gadget.</span></h1>
+   <p class="sub">Creative gadgets, decorative lights and lifestyle finds—all in one place.</p>
    <div class="btns">
     <a class="btn gold" href="#products">Explore Collection</a>
-    <a class="btn line wa" href="#" data-msg="Hello GlowAura! I would like to place an order.">
+    <a class="btn line wa" href="#" data-msg="Hello Mular Juice! I would like to place an order.">
      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.300 1.200-1.800 1.200-.5.100-1 .2-3.300-.7-2.800-1.100-4.600-4-4.700-4.200-.1-.2-1.100-1.500-1.100-2.800s.7-2 1-2.300c.2-.3.500-.3.700-.3h.5c.2 0 .4 0 .6.500l.8 2c.1.200.1.400 0 .5l-.3.500-.4.400c-.1.200-.3.300-.1.600.2.300.8 1.300 1.700 2.100 1.200 1 2.100 1.300 2.400 1.500.3.100.5.100.6-.1l.9-1.100c.2-.3.400-.2.600-.1l1.900.9c.3.100.5.200.5.300.1.200.1.800-.1 1.400Z"/></svg>
      Order on WhatsApp</a>
    </div>
@@ -266,7 +266,7 @@ section,.hero,footer{isolation:isolate}
 <section class="alt" id="featured">
  <div class="wrap feat">
   <div class="pic rv">
-   <svg viewBox="0 0 400 480" role="img" aria-label="Personalized Couple Acrylic LED Photo Lamp" id="lamp2">
+   <svg viewBox="0 0 400 480" role="img" aria-label="Featured LED Photo Lamp" id="lamp2">
     <ellipse cx="200" cy="260" rx="190" ry="210" fill="url(#halo)" opacity=".8"/>
     <rect x="80" y="40" width="240" height="320" rx="14" fill="#1a1916" stroke="#C5A45A" stroke-opacity=".5"/>
     <rect x="80" y="40" width="240" height="320" rx="14" fill="var(--c)" opacity=".16"/>
@@ -279,7 +279,7 @@ section,.hero,footer{isolation:isolate}
    </svg>
   </div>
   <div class="rv">
-   <h2>Personalized Couple Acrylic LED Photo Lamp</h2>
+   <h2>Featured LED Photo Lamp</h2>
    <ul>
     <li>Custom Couple Photo</li>
     <li>Personalized Names</li>
@@ -288,7 +288,7 @@ section,.hero,footer{isolation:isolate}
     <li>Perfect Personalized Gift</li>
    </ul>
    <div class="price" data-price>৳ ____ <small>Price coming soon</small></div>
-   <div class="btns"><a class="btn gold wa" href="#" data-msg="Hello GlowAura! I want to order the Personalized Couple Acrylic LED Photo Lamp.">Order on WhatsApp</a></div>
+   <div class="btns"><a class="btn gold wa" href="#" data-msg="Hello Mular Juice! I want to order the Featured LED Photo Lamp.">Order on WhatsApp</a></div>
   </div>
  </div>
 </section>
@@ -297,9 +297,8 @@ section,.hero,footer{isolation:isolate}
 <section id="products">
  <div class="wrap">
   <h2 class="rv">Our Products</h2>
-  <p class="lead rv">Personalized acrylic LED photo lamps and decorative LED gifts, made around your memories.</p>
-  <div class="grid" id="productGrid" aria-label="Swipe to browse products"></div>
-  <p class="hint" style="margin-top:8px">← Swipe to explore more products →</p>
+  <p class="lead rv">Explore creative gadgets, decorative lighting and lifestyle essentials—selected to add something special to your everyday life.</p>
+  <div class="grid" id="productGrid" aria-label="Mular Juice product collection"></div>
  </div>
 </section>
 
@@ -321,8 +320,8 @@ section,.hero,footer{isolation:isolate}
 
 <section class="alt" id="customize">
   <div class="wrap">
-    <h2 class="rv">Create Your Own Glow</h2>
-    <p class="lead rv">Customize your personal LED photo lamp.</p>
+    <h2 class="rv">Make Everyday More Special</h2>
+    <p class="lead rv">Explore products that bring creativity and convenience to your everyday life.</p>
 
     <div class="ga-editor">
       <div class="ga-preview">
@@ -473,7 +472,7 @@ section,.hero,footer{isolation:isolate}
 
   order.addEventListener("click", function(e){
     e.preventDefault();
-    const message = "Hello GlowAura! I want to order a custom lamp. Names: "
+    const message = "Hello Mular Juice! I want to order a custom lamp. Names: "
       + (nameInput.value || "Not provided")
       + ". I have selected a photo and lamp colour on your website. Please contact me.";
     const number = (window.SETTINGS && SETTINGS.whatsappNumber || "").replace(/\\D/g, "");
@@ -488,7 +487,7 @@ section,.hero,footer{isolation:isolate}
 <!-- WHY -->
 <section id="why">
  <div class="wrap">
-  <h2 class="rv">Why Choose GlowAura</h2>
+  <h2 class="rv">Why Choose Mular Juice</h2>
   <div class="why">
    <div class="rv"><h3>Personalized Designs</h3><p>Every piece is made around your own photo and story.</p></div>
    <div class="rv"><h3>Creative Gift Ideas</h3><p>Thoughtful ideas for birthdays, anniversaries and every occasion.</p></div>
@@ -502,7 +501,7 @@ section,.hero,footer{isolation:isolate}
 <section class="alt" id="about">
  <div class="wrap about">
   <h2 class="rv">About Us</h2><div class="rule"></div>
-  <p class="rv">GlowAura is a personalized gift brand focused on turning special memories into beautiful decorative pieces.</p>
+  <p class="rv">Mular Juice brings together creative gadgets, decorative lighting and lifestyle products to make everyday moments more enjoyable.</p>
   <p class="rv">Our goal is to make every gift more meaningful through personalized designs and creative lighting.</p>
  </div>
 </section>
@@ -514,7 +513,7 @@ section,.hero,footer{isolation:isolate}
    <h2>Contact Us</h2>
    <p class="lead">Message us to order, ask a question or start your custom design.</p>
    <div class="btns">
-    <a class="btn gold wa" href="#" data-msg="Hello GlowAura! I have a question.">WhatsApp</a>
+    <a class="btn gold wa" href="#" data-msg="Hello Mular Juice! I have a question.">WhatsApp</a>
     <a class="btn line" id="fb" href="#" target="_blank" rel="noopener">Facebook</a>
    </div>
   </div>
@@ -534,7 +533,7 @@ section,.hero,footer{isolation:isolate}
   <button class="order-close" id="orderClose" aria-label="Close">×</button>
   <div id="orderFormWrap">
    <h2 id="orderHeading">Complete Your Order</h2>
-   <p class="subline">GlowAura · Every Memory Has a Glow</p>
+   <p class="subline">Mular Juice · Gadgets • Lifestyle • Innovation</p>
    <form id="customerOrderForm">
     <div class="order-field"><label for="oName">♙ Customer Name</label><input id="oName" name="customer_name" placeholder="Enter your full name" maxlength="100" required></div>
     <div class="order-field"><label for="oMobile">☎ Mobile Number</label><input id="oMobile" name="mobile" inputmode="tel" placeholder="01XXXXXXXXX" pattern="01[3-9][0-9]{8}" maxlength="11" required></div>
@@ -548,17 +547,17 @@ section,.hero,footer{isolation:isolate}
      <p style="display:flex;justify-content:space-between;gap:12px;margin:5px 0;color:var(--cream)"><span>Total Amount (including delivery)</span><strong id="oGrandTotal" style="color:var(--gold2)">৳150</strong></p>
      <p class="order-note" style="margin:8px 0 0">Tangail: ৳70 · Other districts: ৳150</p>
     </div>
-    <p class="order-note">Your order details will be sent securely to GlowAura.</p>
+    <p class="order-note">Your order details will be sent securely to Mular Juice.</p>
     <button class="btn gold order-submit" id="submitOrder" type="submit">CONFIRM ORDER ✦</button>
    </form>
   </div>
-  <div class="order-success" id="orderSuccess"><div class="success-mark">✓</div><h2>Order Received!</h2><p>Your unique Order ID:</p><h2 id="successOrderId"></h2><p class="subline">GlowAura will contact you to confirm your order.</p><button type="button" class="btn line" id="successDone">Done</button></div>
+  <div class="order-success" id="orderSuccess"><div class="success-mark">✓</div><h2>Order Received!</h2><p>Your unique Order ID:</p><h2 id="successOrderId"></h2><p class="subline">Mular Juice will contact you to confirm your order.</p><button type="button" class="btn line" id="successDone">Done</button></div>
  </div>
 </div>
 
 <footer>
  <div class="wrap">
-  <div class="msg">GlowAura — Every Memory Has a Glow.</div>
+  <div class="msg">Mular Juice — Gadgets • Lifestyle • Innovation.</div>
   <small id="copy"></small>
  </div>
 </footer>
@@ -566,7 +565,7 @@ section,.hero,footer{isolation:isolate}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============================================================
-   EDIT HERE — GlowAura site settings (no other coding needed)
+   EDIT HERE — Mular Juice site settings (no other coding needed)
    Change only the text between the quote marks, then save.
    ============================================================ */
 var SETTINGS = {
@@ -675,7 +674,7 @@ var PRODUCTS = [
   function wa(msg){ return "https://wa.me/" + num + "?text=" + encodeURIComponent(msg); }
   function bindWa(root){
     (root||document).querySelectorAll("a.wa").forEach(function(a){
-      a.href = wa(a.getAttribute("data-msg")||"Hello GlowAura!");
+      a.href = wa(a.getAttribute("data-msg")||"Hello Mular Juice!");
       a.target = "_blank"; a.rel = "noopener";
     });
   }
@@ -699,7 +698,7 @@ var PRODUCTS = [
     document.getElementById("modalProductName").textContent = p.name;
     document.getElementById("modalProductText").textContent = p.text;
     var modalImg = document.getElementById("modalProductImage");
-    modalImg.src = "https://raw.githubusercontent.com/soyodsimanto320-netizen/GlowAura-Gift/main/" + p.image;
+    modalImg.src = "https://raw.githubusercontent.com/soyodsimanto320-netizen/Mular Juice-Gift/main/" + p.image;
     modalImg.alt = p.name;
     document.getElementById("modalProductPrice").innerHTML =
       (p.regularPrice ? '<del>৳ ' + p.regularPrice + '</del>' : '') + '৳ ' + p.price;
@@ -745,7 +744,7 @@ var PRODUCTS = [
   orderModal.addEventListener("click",function(e){if(e.target===orderModal)closeOrderForm();});
   document.getElementById("modalWhatsApp").addEventListener("click",function(e){
     if(!selectedProduct)return;
-    var message="Hello GlowAura! I want to order: "+selectedProduct.name+". Design/colour: "+selectedVariant+". Price: ৳ "+selectedProduct.price+". Please confirm availability.";
+    var message="Hello Mular Juice! I want to order: "+selectedProduct.name+". Design/colour: "+selectedVariant+". Price: ৳ "+selectedProduct.price+". Please confirm availability.";
     this.href=wa(message);
   });
 
@@ -757,7 +756,7 @@ var PRODUCTS = [
     d.setAttribute("aria-label","View " + p.name);
 
     var img = document.createElement("img");
-    img.src = "https://raw.githubusercontent.com/soyodsimanto320-netizen/GlowAura-Gift/main/" + p.image;
+    img.src = "https://raw.githubusercontent.com/soyodsimanto320-netizen/Mular Juice-Gift/main/" + p.image;
     img.alt = p.name;
     img.style.width = "100%";
     img.style.height = "190px";
@@ -796,7 +795,7 @@ var PRODUCTS = [
   var m = document.getElementById("cMail");
   if (S.email){ var ml = document.createElement("a"); ml.href = "mailto:" + S.email; ml.textContent = S.email; m.textContent = ""; m.appendChild(ml); } else m.textContent = "Add your email in settings";
   document.getElementById("cLoc").textContent = S.location || "—";
-  document.getElementById("copy").textContent = "© " + new Date().getFullYear() + " GlowAura";
+  document.getElementById("copy").textContent = "© " + new Date().getFullYear() + " Mular Juice";
 
   // mobile menu
   var nav = document.getElementById("nav"), bg = document.getElementById("burger");
@@ -890,7 +889,7 @@ var PRODUCTS = [
  });
  // Lightweight admin page: open this same site with ?admin=1
  if(new URLSearchParams(location.search).get('admin')==='1'){
-  document.querySelector('main').innerHTML='<section><div class="wrap"><h2>GlowAura Admin</h2><p class="lead">Private order management</p><div class="admin-panel" id="adminPanel"><div id="adminLogin"><h3>Admin Login</h3><input id="adminEmail" type="email" placeholder="Admin email"><input id="adminPassword" type="password" placeholder="Password"><button class="btn gold" id="adminSignIn">Sign In</button><p id="adminMessage" class="order-note"></p></div><div id="adminOrders" style="display:none"><button class="btn line" id="adminRefresh">Refresh Orders</button> <button class="btn line" id="adminSignOut">Sign Out</button><div id="adminTableWrap"></div></div></div></div></section>';
+  document.querySelector('main').innerHTML='<section><div class="wrap"><h2>Mular Juice Admin</h2><p class="lead">Private order management</p><div class="admin-panel" id="adminPanel"><div id="adminLogin"><h3>Admin Login</h3><input id="adminEmail" type="email" placeholder="Admin email"><input id="adminPassword" type="password" placeholder="Password"><button class="btn gold" id="adminSignIn">Sign In</button><p id="adminMessage" class="order-note"></p></div><div id="adminOrders" style="display:none"><button class="btn line" id="adminRefresh">Refresh Orders</button> <button class="btn line" id="adminSignOut">Sign Out</button><div id="adminTableWrap"></div></div></div></div></section>';
   document.getElementById('adminSignIn').onclick=async()=>{const msg=document.getElementById('adminMessage');if(!supa){msg.textContent='Database connection is unavailable. Refresh and try again.';return;}msg.textContent='Signing in…';const {data,error}=await supa.auth.signInWithPassword({email:document.getElementById('adminEmail').value,password:document.getElementById('adminPassword').value});if(error){msg.textContent=error.message;return;}const {data:allowed,error:checkError}=await supa.from('glow_admins').select('user_id').eq('user_id',data.user.id).maybeSingle();if(checkError||!allowed){await supa.auth.signOut();msg.textContent='This account is not an authorized admin.';return;}document.getElementById('adminLogin').style.display='none';document.getElementById('adminOrders').style.display='block';loadOrders();};
   async function loadOrders(){const box=document.getElementById('adminTableWrap');box.textContent='Loading…';const {data,error}=await supa.from('glow_orders').select('*').order('created_at',{ascending:false});if(error){box.textContent='Could not load orders: '+error.message;return;}if(!data.length){box.textContent='No orders yet.';return;}let html='<div style="overflow-x:auto;width:100%"><table class="admin-table"><thead><tr><th>Order</th><th>Order Date &amp; Time</th><th>Customer</th><th>Mobile</th><th>Delivery District</th><th>Full Delivery Address</th><th>Delivery Charge</th><th>Product</th><th>Qty</th><th>Status</th></tr></thead><tbody>';data.forEach(o=>{const fee=o.district==='Tangail'?70:150;const orderTime=o.created_at?new Date(o.created_at).toLocaleString('en-GB',{timeZone:'Asia/Dhaka',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true}):'Time not recorded';const isNew=o.status==='Pending';html+='<tr><td>'+esc(o.order_id)+(isNew?' <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(212,175,55,.14);border:1px solid #d4af37;color:#f2cf68;padding:4px 9px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.5px;margin:5px 0 0 5px;white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:#ff5b5b;display:inline-block;box-shadow:0 0 7px #ff5b5b"></span>NEW ORDER</span>':'')+'</td><td style="min-width:145px;white-space:normal">'+esc(orderTime)+'</td><td class="customer-cell">'+esc(o.customer_name)+'</td><td>'+esc(o.mobile)+'</td><td>'+esc(o.district)+'</td><td class="address-cell">'+esc(o.address)+'</td><td>৳'+fee+'</td><td>'+esc(o.product_name)+'<br>'+esc(o.design||'')+'</td><td>'+esc(o.quantity)+'</td><td><select data-id="'+esc(o.id)+'"><option '+(o.status==='Pending'?'selected':'')+'>Pending</option><option '+(o.status==='Confirmed'?'selected':'')+'>Confirmed</option><option '+(o.status==='Processing'?'selected':'')+'>Processing</option><option '+(o.status==='Delivered'?'selected':'')+'>Delivered</option></select></td></tr>';});html+='</tbody></table></div>';box.innerHTML=html;box.querySelectorAll('select').forEach(sel=>sel.onchange=async()=>{const {error}=await supa.from('glow_orders').update({status:sel.value}).eq('id',sel.dataset.id);if(error){alert('Status update failed: '+error.message);loadOrders();}});}
   function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
