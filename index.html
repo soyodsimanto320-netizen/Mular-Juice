@@ -176,6 +176,7 @@ section,.hero,footer{isolation:isolate}
 .order-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .order-actions .btn{flex:1;min-width:170px}
 .btn.whatsapp{background:#168c55;border-color:#168c55;color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.4)}
 .order-modal{position:fixed;inset:0;z-index:150;background:rgba(0,0,0,.84);display:none;align-items:center;justify-content:center;padding:14px}
 .order-modal.open{display:flex;animation:modalFade .25s ease both}
 .order-box{width:min(560px,100%);max-height:88dvh;overflow:auto;background:#181715;border:1px solid var(--gold);border-radius:14px;padding:22px;box-shadow:0 20px 80px #000;animation:modalUnfold .45s ease both}
@@ -200,6 +201,20 @@ section,.hero,footer{isolation:isolate}
 .admin-table select{background:#111;color:var(--cream);padding:8px;border:1px solid var(--gold)}
 @media(max-width:520px){.order-box{padding:16px}.order-actions{flex-direction:column}.order-actions .btn{width:100%}.admin-panel{padding:10px;overflow:auto}}
 
+
+/* Mular Juice product manager */
+.admin-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.admin-tab{background:#111;border:1px solid var(--line);color:var(--cream);padding:11px 18px;border-radius:7px;cursor:pointer}
+.admin-tab.active{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#17130a;border-color:var(--gold2)}
+.admin-section{display:none;margin-top:18px}.admin-section.active{display:block}
+.pm-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;background:#111;border:1px solid var(--line);padding:16px;border-radius:10px;margin:16px 0}
+.pm-form label{display:block;color:var(--gold2);font-size:.88rem;margin:0 0 6px}
+.pm-form input,.pm-form textarea{width:100%;background:#181715;color:var(--cream);border:1px solid var(--line);border-radius:6px;padding:12px;font:400 15px var(--sans)}
+.pm-form textarea{min-height:82px;resize:vertical}.pm-span{grid-column:1/-1}.pm-check{display:flex;align-items:center;gap:10px;color:var(--cream)}.pm-check input{width:auto}
+.pm-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:18px}
+.pm-item{background:#111;border:1px solid var(--line);border-radius:9px;padding:12px;min-width:0}.pm-item img{width:100%;height:130px;object-fit:contain;background:#090909;border:1px solid var(--line);border-radius:6px}.pm-item h4{color:var(--gold2);margin:10px 0 4px;font-size:1.05rem}.pm-item p{color:var(--mute);font-size:.85rem;margin:4px 0}.pm-actions{display:flex;gap:8px;margin-top:10px}.pm-actions button{flex:1;min-width:0;padding:9px 6px;font-size:.72rem;letter-spacing:.04em}
+.pm-status{display:inline-block;padding:3px 8px;border:1px solid var(--line);border-radius:30px;font-size:.72rem;color:var(--gold2)}
+@media(max-width:600px){.pm-form{grid-template-columns:1fr}.pm-span{grid-column:auto}.admin-tabs>*{flex:1}.admin-tabs button{padding:10px 8px;font-size:.8rem}}
 
 /* Supabase password recovery */
 #passwordRecovery{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.9);align-items:center;justify-content:center;padding:18px}
@@ -722,10 +737,17 @@ var PRODUCTS = [
     document.getElementById("modalProductName").textContent = p.name;
     document.getElementById("modalProductText").textContent = p.text;
     var modalImg = document.getElementById("modalProductImage");
-    modalImg.src = "https://raw.githubusercontent.com/soyodsimanto320-netizen/GlowAura-Gift/main/" + p.image;
+    modalImg.src = p.image_url || (p.image ? "https://raw.githubusercontent.com/soyodsimanto320-netizen/Mular-Juice/main/" + p.image : "");
     modalImg.alt = p.name;
+    var unavailable = p.is_available === false;
+    document.getElementById("modalOrder").disabled = unavailable;
+    document.getElementById("modalWhatsApp").style.opacity = unavailable ? ".45" : "1";
+    document.getElementById("modalWhatsApp").style.pointerEvents = unavailable ? "none" : "auto";
+    document.getElementById("modalOrder").textContent = unavailable ? "Out of Stock" : "✦ Order Now";
+    var regularPrice = p.regular_price != null ? p.regular_price : p.regularPrice;
+    var offerPrice = p.offer_price != null ? p.offer_price : p.price;
     document.getElementById("modalProductPrice").innerHTML =
-      (p.regularPrice ? '<del>৳ ' + p.regularPrice + '</del>' : '') + '৳ ' + p.price;
+      (regularPrice ? '<del>৳ ' + regularPrice + '</del>' : '') + '৳ ' + offerPrice;
     var list = document.getElementById("modalVariants");
     list.innerHTML = "";
     (p.variants && p.variants.length ? p.variants : ["Standard"]).forEach(function(v, idx){
@@ -768,46 +790,42 @@ var PRODUCTS = [
   orderModal.addEventListener("click",function(e){if(e.target===orderModal)closeOrderForm();});
   document.getElementById("modalWhatsApp").addEventListener("click",function(e){
     if(!selectedProduct)return;
-    var message="Hello Mular Juice! I want to order: "+selectedProduct.name+". Design/colour: "+selectedVariant+". Price: ৳ "+selectedProduct.price+". Please confirm availability.";
+    var chosenPrice = selectedProduct.offer_price != null ? selectedProduct.offer_price : selectedProduct.price;
+    var message="Hello Mular Juice! I want to order: "+selectedProduct.name+". Design/colour: "+selectedVariant+". Price: ৳ "+chosenPrice+". Please confirm availability.";
     this.href=wa(message);
   });
 
-  PRODUCTS.forEach(function(p){
-    var d = document.createElement("div");
-    d.className = "card rv";
-    d.tabIndex = 0;
-    d.setAttribute("role","button");
-    d.setAttribute("aria-label","View " + p.name);
-
-    var img = document.createElement("img");
-    img.src = "https://raw.githubusercontent.com/soyodsimanto320-netizen/GlowAura-Gift/main/" + p.image;
-    img.alt = p.name;
-    img.style.width = "100%";
-    img.style.height = "190px";
-    img.style.objectFit = "contain";
-    img.onerror = function(){ this.alt = "Image not found: " + p.image; };
-
-    var h = document.createElement("h3");
-    h.textContent = p.name;
-    var t = document.createElement("p");
-    t.textContent = p.text;
-
-    var pr = document.createElement("div");
-    pr.className = "pr";
-    pr.innerHTML = (p.regularPrice ? '<span class="regular">৳ ' + p.regularPrice + '</span>' : '') +
-      '<span>৳ ' + p.price + '</span>' +
-      (p.regularPrice ? ' <span class="offer-tag">OFFER</span>' : '');
-
-    var b = document.createElement("button");
-    b.type = "button";
-    b.className = "btn line";
-    b.textContent = "View Designs";
-    b.addEventListener("click", function(){ openProduct(p); });
-    d.addEventListener("click", function(e){ if(e.target!==b) openProduct(p); });
-    d.addEventListener("keydown", function(e){ if(e.key==="Enter" || e.key===" "){e.preventDefault();openProduct(p);} });
-    d.append(img,h,t,pr,b);
-    pg.appendChild(d);
-  });
+  window.renderMularProducts = function(productList){
+    pg.innerHTML = "";
+    (productList || []).forEach(function(p){
+      var d = document.createElement("div");
+      d.className = "card rv";
+      d.tabIndex = 0;
+      d.setAttribute("role","button");
+      d.setAttribute("aria-label","View " + p.name);
+      var img = document.createElement("img");
+      img.src = p.image_url || (p.image ? "https://raw.githubusercontent.com/soyodsimanto320-netizen/Mular-Juice/main/" + p.image : "");
+      img.alt = p.name;
+      img.style.width = "100%"; img.style.height = "190px"; img.style.objectFit = "contain";
+      img.onerror = function(){ this.alt = "Image unavailable"; };
+      var h = document.createElement("h3"); h.textContent = p.name;
+      var t = document.createElement("p"); t.textContent = p.text || p.description || "";
+      var pr = document.createElement("div"); pr.className = "pr";
+      var regular = p.regular_price != null ? p.regular_price : p.regularPrice;
+      var offer = p.offer_price != null ? p.offer_price : p.price;
+      pr.innerHTML = (regular ? '<span class="regular">৳ ' + regular + '</span>' : '') + '<span>৳ ' + offer + '</span>' + (regular ? ' <span class="offer-tag">OFFER</span>' : '');
+      var stock = document.createElement("small");
+      stock.textContent = p.is_available === false ? "OUT OF STOCK" : "IN STOCK";
+      stock.style.cssText = "display:inline-block;margin:0 0 12px;color:"+(p.is_available===false?"#ff8b8b":"#9bd6a7")+";letter-spacing:.08em;font-size:.7rem";
+      var b = document.createElement("button"); b.type = "button"; b.className = "btn line";
+      b.textContent = p.is_available === false ? "Out of Stock" : "View Designs";
+      b.addEventListener("click", function(){ openProduct(p); });
+      d.addEventListener("click", function(e){ if(e.target!==b) openProduct(p); });
+      d.addEventListener("keydown", function(e){ if(e.key==="Enter" || e.key===" "){e.preventDefault();openProduct(p);} });
+      d.append(img,h,t,pr,stock,b); pg.appendChild(d);
+    });
+  };
+  window.renderMularProducts(PRODUCTS);
 
 
   var fb = document.getElementById("fb");
@@ -887,7 +905,7 @@ var PRODUCTS = [
  function updateOrderTotals(){
   const fee=deliveryFee();
   const product=window.__glowSelectedProduct||null;
-  const unit=(product&&product.price)?Number(product.price):0;
+  const unit=product?Number(product.offer_price!=null?product.offer_price:product.price)||0:0;
   const qty=Math.max(1,Number(document.getElementById('oQty').value)||1);
   document.getElementById('oDeliveryFee').textContent='৳'+fee;
   document.getElementById('oGrandTotal').textContent='৳'+(unit*qty+fee);
@@ -934,7 +952,7 @@ var PRODUCTS = [
    if(!supa)throw new Error('Connection library did not load. Please refresh and try again.');
    const orderId='GA-'+new Date().toISOString().slice(0,10).replace(/-/g,'')+'-'+crypto.randomUUID().slice(0,6).toUpperCase();
    const p=window.__glowSelectedProduct||null;
-   const price=(p && p.price) ? Number(p.price) : 0;
+   const price=p ? Number(p.offer_price!=null?p.offer_price:p.price)||0 : 0;
    const payload={order_id:orderId,customer_name:document.getElementById('oName').value.trim(),mobile:document.getElementById('oMobile').value.trim(),district:ds.value,address:document.getElementById('oAddress').value.trim(),product_name:document.getElementById('oProduct').value,design:document.getElementById('oDesign').value,quantity:Number(document.getElementById('oQty').value),unit_price:price,status:'Pending'};
    const {error}=await supa.from('glow_orders').insert(payload);
    if(error)throw error;
@@ -942,14 +960,26 @@ var PRODUCTS = [
   }catch(err){alert('Order could not be submitted: '+(err.message||'Please try again.'));}
   finally{btn.disabled=false;btn.textContent='CONFIRM ORDER ✦';}
  });
- // Lightweight admin page: open this same site with ?admin=1
+ // Admin page: existing order manager plus database-backed product manager.
  if(new URLSearchParams(location.search).get('admin')==='1'){
-  document.querySelector('main').innerHTML='<section><div class="wrap"><h2>Mular Juice Admin</h2><p class="lead">Private order management</p><div class="admin-panel" id="adminPanel"><div id="adminLogin"><h3>Admin Login</h3><input id="adminEmail" type="email" placeholder="Admin email"><input id="adminPassword" type="password" placeholder="Password"><button class="btn gold" id="adminSignIn">Sign In</button><p id="adminMessage" class="order-note"></p></div><div id="adminOrders" style="display:none"><button class="btn line" id="adminRefresh">Refresh Orders</button> <button class="btn line" id="adminSignOut">Sign Out</button><div id="adminTableWrap"></div></div></div></div></section>';
-  document.getElementById('adminSignIn').onclick=async()=>{const msg=document.getElementById('adminMessage');if(!supa){msg.textContent='Database connection is unavailable. Refresh and try again.';return;}msg.textContent='Signing in…';const {data,error}=await supa.auth.signInWithPassword({email:document.getElementById('adminEmail').value,password:document.getElementById('adminPassword').value});if(error){msg.textContent=error.message;return;}const {data:allowed,error:checkError}=await supa.from('glow_admins').select('user_id').eq('user_id',data.user.id).maybeSingle();if(checkError||!allowed){await supa.auth.signOut();msg.textContent='This account is not an authorized admin.';return;}document.getElementById('adminLogin').style.display='none';document.getElementById('adminOrders').style.display='block';loadOrders();};
+  document.querySelector('main').innerHTML='<section><div class="wrap"><h2>Mular Juice Admin</h2><p class="lead">Manage orders and products from one place</p><div class="admin-panel" id="adminPanel"><div id="adminLogin"><h3>Admin Login</h3><input id="adminEmail" type="email" placeholder="Admin email" autocomplete="username"><input id="adminPassword" type="password" placeholder="Password" autocomplete="current-password"><button class="btn gold" id="adminSignIn">Sign In</button><p id="adminMessage" class="order-note"></p></div><div id="adminDashboard" style="display:none"><div class="admin-tabs"><button class="admin-tab active" data-tab="orders">Orders</button><button class="admin-tab" data-tab="products">Products</button><button class="admin-tab" id="adminSignOut">Sign Out</button></div><div class="admin-section active" id="adminOrders"><button class="btn line" id="adminRefresh">Refresh Orders</button><div id="adminTableWrap"></div></div><div class="admin-section" id="adminProducts"><h3>Product Management</h3><p class="order-note">Add, edit, delete products and update stock. Changes appear on the website automatically.</p><form class="pm-form" id="productForm"><input type="hidden" id="pmId"><div><label for="pmName">Product Name *</label><input id="pmName" required maxlength="120" placeholder="Product name"></div><div><label for="pmOffer">Offer Price (৳) *</label><input id="pmOffer" type="number" min="0" step="1" required placeholder="899"></div><div><label for="pmRegular">Regular Price (৳)</label><input id="pmRegular" type="number" min="0" step="1" placeholder="1099"></div><div><label for="pmVariants">Design / Colour options</label><input id="pmVariants" placeholder="Warm White, RGB"></div><div class="pm-span"><label for="pmDescription">Description</label><textarea id="pmDescription" maxlength="500" placeholder="Short product description"></textarea></div><div class="pm-span"><label for="pmImage">Product Image *</label><input id="pmImage" type="file" accept="image/*"></div><div class="pm-span"><label class="pm-check"><input id="pmAvailable" type="checkbox" checked> Stock Available</label></div><div class="pm-span"><button class="btn gold" id="pmSave" type="submit">Save Product</button> <button class="btn line" id="pmCancel" type="button">Clear Form</button></div><p class="pm-span order-note" id="pmMessage" aria-live="polite"></p></form><div class="pm-actions"><button class="btn line" id="pmImport" type="button">Import Existing 11 Products</button><button class="btn line" id="pmRefresh" type="button">Refresh Products</button></div><div id="pmList" class="pm-list"></div></div></div></div></div></section>';
+  const tabs=document.querySelectorAll('.admin-tab[data-tab]');
+  tabs.forEach(t=>t.addEventListener('click',()=>{tabs.forEach(x=>x.classList.toggle('active',x===t));document.querySelectorAll('.admin-section').forEach(x=>x.classList.toggle('active',x.id==='admin'+(t.dataset.tab==='orders'?'Orders':'Products')));}));
+  document.getElementById('adminSignIn').onclick=async()=>{const msg=document.getElementById('adminMessage');if(!supa){msg.textContent='Database connection is unavailable. Refresh and try again.';return;}msg.textContent='Signing in…';const {data,error}=await supa.auth.signInWithPassword({email:document.getElementById('adminEmail').value,password:document.getElementById('adminPassword').value});if(error){msg.textContent=error.message;return;}const {data:allowed,error:checkError}=await supa.from('glow_admins').select('user_id').eq('user_id',data.user.id).maybeSingle();if(checkError||!allowed){await supa.auth.signOut();msg.textContent='This account is not an authorized admin.';return;}document.getElementById('adminLogin').style.display='none';document.getElementById('adminDashboard').style.display='block';loadOrders();loadAdminProducts();};
   async function loadOrders(){const box=document.getElementById('adminTableWrap');box.textContent='Loading…';const {data,error}=await supa.from('glow_orders').select('*').order('created_at',{ascending:false});if(error){box.textContent='Could not load orders: '+error.message;return;}if(!data.length){box.textContent='No orders yet.';return;}let html='<div style="overflow-x:auto;width:100%"><table class="admin-table"><thead><tr><th>Order</th><th>Order Date &amp; Time</th><th>Customer</th><th>Mobile</th><th>Delivery District</th><th>Full Delivery Address</th><th>Delivery Charge</th><th>Product</th><th>Qty</th><th>Status</th></tr></thead><tbody>';data.forEach(o=>{const fee=o.district==='Tangail'?70:150;const orderTime=o.created_at?new Date(o.created_at).toLocaleString('en-GB',{timeZone:'Asia/Dhaka',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true}):'Time not recorded';const isNew=o.status==='Pending';html+='<tr><td>'+esc(o.order_id)+(isNew?' <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(212,175,55,.14);border:1px solid #d4af37;color:#f2cf68;padding:4px 9px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.5px;margin:5px 0 0 5px;white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:#ff5b5b;display:inline-block;box-shadow:0 0 7px #ff5b5b"></span>NEW ORDER</span>':'')+'</td><td style="min-width:145px;white-space:normal">'+esc(orderTime)+'</td><td class="customer-cell">'+esc(o.customer_name)+'</td><td>'+esc(o.mobile)+'</td><td>'+esc(o.district)+'</td><td class="address-cell">'+esc(o.address)+'</td><td>৳'+fee+'</td><td>'+esc(o.product_name)+'<br>'+esc(o.design||'')+'</td><td>'+esc(o.quantity)+'</td><td><select data-id="'+esc(o.id)+'"><option '+(o.status==='Pending'?'selected':'')+'>Pending</option><option '+(o.status==='Confirmed'?'selected':'')+'>Confirmed</option><option '+(o.status==='Processing'?'selected':'')+'>Processing</option><option '+(o.status==='Delivered'?'selected':'')+'>Delivered</option></select></td></tr>';});html+='</tbody></table></div>';box.innerHTML=html;box.querySelectorAll('select').forEach(sel=>sel.onchange=async()=>{const {error}=await supa.from('glow_orders').update({status:sel.value}).eq('id',sel.dataset.id);if(error){alert('Status update failed: '+error.message);loadOrders();}});}
   function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  const pmForm=document.getElementById('productForm');
+  function resetProductForm(){pmForm.reset();document.getElementById('pmId').value='';document.getElementById('pmAvailable').checked=true;document.getElementById('pmSave').textContent='Save Product';document.getElementById('pmMessage').textContent='';}
+  async function loadAdminProducts(){const box=document.getElementById('pmList');box.textContent='Loading products…';const {data,error}=await supa.from('mular_products').select('*').order('created_at',{ascending:false});if(error){box.textContent='Products table is not ready. Run the setup SQL first. Details: '+error.message;return;}if(!data.length){box.textContent='No database products yet. Use “Import Existing 11 Products” to move your current products into the manager.';return;}box.innerHTML='';data.forEach(p=>{const item=document.createElement('div');item.className='pm-item';const img=document.createElement('img');img.src=p.image_url||'';img.alt=p.name;const h=document.createElement('h4');h.textContent=p.name;const desc=document.createElement('p');desc.textContent='৳'+p.offer_price+(p.regular_price?'  |  Regular ৳'+p.regular_price:'');const status=document.createElement('span');status.className='pm-status';status.textContent=p.is_available?'IN STOCK':'OUT OF STOCK';const actions=document.createElement('div');actions.className='pm-actions';const edit=document.createElement('button');edit.className='btn line';edit.type='button';edit.textContent='Edit';edit.onclick=()=>{document.getElementById('pmId').value=p.id;document.getElementById('pmName').value=p.name;document.getElementById('pmOffer').value=p.offer_price;document.getElementById('pmRegular').value=p.regular_price||'';document.getElementById('pmDescription').value=p.description||'';document.getElementById('pmVariants').value=Array.isArray(p.variants)?p.variants.join(', '):'';document.getElementById('pmAvailable').checked=!!p.is_available;document.getElementById('pmSave').textContent='Update Product';document.getElementById('pmMessage').textContent='Editing: '+p.name;document.getElementById('pmImage').value='';pmForm.scrollIntoView({behavior:'smooth',block:'start'});};const del=document.createElement('button');del.className='btn line';del.type='button';del.textContent='Delete';del.onclick=async()=>{if(!confirm('Delete “'+p.name+'”?'))return;const {error}=await supa.from('mular_products').delete().eq('id',p.id);if(error){alert('Delete failed: '+error.message);return;}loadAdminProducts();loadStoreProducts();};actions.append(edit,del);item.append(img,h,desc,status,actions);box.append(item);});}
+  async function loadStoreProducts(){const {data,error}=await supa.from('mular_products').select('*').order('created_at',{ascending:false});if(!error){window.renderMularProducts(data||[]);}}
+  pmForm.addEventListener('submit',async e=>{e.preventDefault();const msg=document.getElementById('pmMessage'),btn=document.getElementById('pmSave');btn.disabled=true;msg.textContent='Saving product…';try{let imageUrl=null;const file=document.getElementById('pmImage').files[0];if(file){if(!file.type.startsWith('image/'))throw new Error('Please choose an image file.');if(file.size>5*1024*1024)throw new Error('Image must be 5 MB or smaller.');const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';const path=Date.now()+'-'+Math.random().toString(36).slice(2,9)+'.'+ext;const {error:upErr}=await supa.storage.from('mular-products').upload(path,file,{upsert:false,contentType:file.type});if(upErr)throw upErr;imageUrl=supa.storage.from('mular-products').getPublicUrl(path).data.publicUrl;}const id=document.getElementById('pmId').value;const payload={name:document.getElementById('pmName').value.trim(),description:document.getElementById('pmDescription').value.trim(),regular_price:document.getElementById('pmRegular').value?Number(document.getElementById('pmRegular').value):null,offer_price:Number(document.getElementById('pmOffer').value),variants:document.getElementById('pmVariants').value.split(',').map(x=>x.trim()).filter(Boolean),is_available:document.getElementById('pmAvailable').checked};if(imageUrl)payload.image_url=imageUrl;if(id){const {error}=await supa.from('mular_products').update(payload).eq('id',id);if(error)throw error;}else{if(!imageUrl)throw new Error('Please upload a product image.');payload.image_url=imageUrl;const {error}=await supa.from('mular_products').insert(payload);if(error)throw error;}msg.textContent='Product saved successfully.';resetProductForm();await loadAdminProducts();await loadStoreProducts();}catch(err){msg.textContent='Could not save: '+(err.message||'Please try again.');}finally{btn.disabled=false;btn.textContent=document.getElementById('pmId').value?'Update Product':'Save Product';}});
+  document.getElementById('pmCancel').onclick=resetProductForm;document.getElementById('pmRefresh').onclick=loadAdminProducts;
+  document.getElementById('pmImport').onclick=async()=>{const msg=document.getElementById('pmMessage');if(!confirm('Import the 11 products currently built into this website? This will add them to the database once.'))return;msg.textContent='Importing existing products…';try{const rows=PRODUCTS.map(p=>({name:p.name,description:p.text,regular_price:p.regularPrice?Number(p.regularPrice):null,offer_price:Number(p.price),image_url:p.image?'https://raw.githubusercontent.com/soyodsimanto320-netizen/Mular-Juice/main/'+p.image:null,variants:p.variants||[],is_available:true}));const {error}=await supa.from('mular_products').insert(rows);if(error)throw error;msg.textContent='Existing products imported. You can edit them now.';await loadAdminProducts();await loadStoreProducts();}catch(err){msg.textContent='Import failed: '+(err.message||'Please try again.');}};
   document.getElementById('adminRefresh').onclick=loadOrders;document.getElementById('adminSignOut').onclick=async()=>{await supa.auth.signOut();location.reload();};
  }
+ // Load database products on the public storefront; if setup is not complete, keep the existing HTML products visible.
+ if(supa){supa.from('mular_products').select('*').order('created_at',{ascending:false}).then(({data,error})=>{if(!error){window.renderMularProducts(data||[]);}});}
+
 })();
 </script>
 
