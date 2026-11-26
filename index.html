@@ -200,10 +200,34 @@ section,.hero,footer{isolation:isolate}
 .admin-table select{background:#111;color:var(--cream);padding:8px;border:1px solid var(--gold)}
 @media(max-width:520px){.order-box{padding:16px}.order-actions{flex-direction:column}.order-actions .btn{width:100%}.admin-panel{padding:10px;overflow:auto}}
 
+
+/* Supabase password recovery */
+#passwordRecovery{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.9);align-items:center;justify-content:center;padding:18px}
+#passwordRecovery.show{display:flex}
+#passwordRecovery .recovery-card{width:min(440px,100%);background:#181715;border:1px solid var(--gold);border-radius:14px;padding:24px;box-shadow:0 20px 70px #000}
+#passwordRecovery h2{font-size:2rem;color:var(--gold2);margin:0 0 8px}
+#passwordRecovery p{color:var(--mute);margin:8px 0 16px}
+#passwordRecovery input{display:block;width:100%;margin:12px 0;padding:14px;background:#101010;color:var(--cream);border:1px solid var(--line);border-radius:7px;font:400 16px var(--sans)}
+#passwordRecovery button{width:100%;margin-top:10px}
+#recoveryMessage{min-height:24px;font-size:.9rem;color:var(--gold2);overflow-wrap:anywhere}
+
 </style>
 </head>
 <body>
 <canvas id="goldParticles" aria-hidden="true"></canvas>
+
+<div id="passwordRecovery" role="dialog" aria-modal="true" aria-labelledby="recoveryTitle">
+ <div class="recovery-card">
+  <h2 id="recoveryTitle">Set a New Password</h2>
+  <p>Choose a new password for your Mular Juice admin account.</p>
+  <form id="passwordRecoveryForm">
+   <input id="recoveryPassword" type="password" autocomplete="new-password" minlength="8" placeholder="New password (at least 8 characters)" required>
+   <input id="recoveryConfirm" type="password" autocomplete="new-password" minlength="8" placeholder="Confirm new password" required>
+   <button class="btn gold" type="submit" id="recoverySubmit">Save New Password</button>
+  </form>
+  <p id="recoveryMessage" aria-live="polite"></p>
+ </div>
+</div>
 
 <header>
  <div class="wrap bar">
@@ -872,6 +896,37 @@ var PRODUCTS = [
  document.getElementById('oQty').addEventListener('input',updateOrderTotals);
  const form=document.getElementById('customerOrderForm');
  const supa=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY):null;
+ // Show a password form only when Supabase confirms a password-recovery session.
+ if(supa){
+  const recoveryBox=document.getElementById('passwordRecovery');
+  const recoveryForm=document.getElementById('passwordRecoveryForm');
+  const recoveryMsg=document.getElementById('recoveryMessage');
+  supa.auth.onAuthStateChange((event,session)=>{
+   if(event==='PASSWORD_RECOVERY' && session){
+    recoveryBox.classList.add('show');
+    document.getElementById('recoveryPassword').focus();
+   }
+  });
+  recoveryForm.addEventListener('submit',async function(e){
+   e.preventDefault();
+   const pass=document.getElementById('recoveryPassword').value;
+   const confirm=document.getElementById('recoveryConfirm').value;
+   const btn=document.getElementById('recoverySubmit');
+   if(pass.length<8){recoveryMsg.textContent='Password must be at least 8 characters.';return;}
+   if(pass!==confirm){recoveryMsg.textContent='Passwords do not match.';return;}
+   btn.disabled=true;btn.textContent='SAVING…';recoveryMsg.textContent='Updating password…';
+   try{
+    const {error}=await supa.auth.updateUser({password:pass});
+    if(error) throw error;
+    recoveryMsg.textContent='Password updated successfully. You can now open Admin Login.';
+    recoveryForm.reset();
+    history.replaceState({},document.title,location.pathname+'?admin=1');
+    setTimeout(()=>{recoveryBox.classList.remove('show');location.reload();},1800);
+   }catch(err){recoveryMsg.textContent='Could not update password: '+(err.message||'Please request a new reset email.');}
+   finally{btn.disabled=false;btn.textContent='Save New Password';}
+  });
+ }
+
  form.addEventListener('submit',async function(e){
   e.preventDefault();
   const btn=document.getElementById('submitOrder');btn.disabled=true;btn.textContent='SENDING ORDER…';
